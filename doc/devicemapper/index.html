@@ -45,8 +45,42 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/devicemapper/lib.rs.html#5-562' title='goto source code'>[src]</a></span></h1>
-<h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+        </span><a id='src-0' class='srclink' href='../src/devicemapper/lib.rs.html#5-739' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>Low-level devicemapper configuration of the running kernel.</p>
+
+<h1 id="overview" class='section-header'><a
+                           href="#overview">Overview</a></h1>
+<p>Linux&#39;s devicemapper allows the creation of block devices whose
+storage is mapped to other block devices in useful ways, either by
+changing the location of its data blocks, or performing some
+operation on the data itself. This is a low-level facility that is
+used by higher-level volume managers such as LVM2. Uses may
+include:</p>
+
+<ul>
+<li>Dividing a large block device into smaller logical volumes (dm-linear)</li>
+<li>Combining several separate block devices into a single block
+device with better performance and/or redundancy (dm-raid)</li>
+<li>Encrypting a block device (dm-crypt)</li>
+<li>Performing Copy-on-Write (COW) allocation of a volume&#39;s blocks
+enabling fast volume cloning and snapshots (dm-thin)</li>
+<li>Configuring a smaller, faster block device to act as a cache for a
+larger, slower one (dm-cache)</li>
+<li>Verifying the contents of a read-only volume (dm-verity)</li>
+</ul>
+
+<h1 id="usage" class='section-header'><a
+                           href="#usage">Usage</a></h1>
+<p>Before they can be used, DM devices must be created using
+<code>DM::device_create()</code>, have a mapping table loaded using
+<code>DM::table_load()</code>, and then activated with
+<code>DM::device_resume()</code>. Once activated, they can be used as a
+regular block device, including having other DM devices map to
+them.</p>
+
+<p>Devices have &quot;active&quot; and &quot;inactive&quot; mapping tables. See function
+descriptions for which table they affect.</p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                     <tr class=' module-item'>
                         <td><a class='struct' href='struct.DM.html'
@@ -62,6 +96,18 @@
                                title='devicemapper::Device'>Device</a></td>
                         <td class='docblock short'>
                              <p>A struct containing the device&#39;s major and minor numbers</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.StatusType.html'
+                               title='devicemapper::StatusType'>StatusType</a></td>
+                        <td class='docblock short'>
+                             <p>Used with <code>DM::table_status()</code> to choose either return of info or
+tables for a target. The contents of each of these strings is
+target-specific.</p>
 
                         </td>
                     </tr>
