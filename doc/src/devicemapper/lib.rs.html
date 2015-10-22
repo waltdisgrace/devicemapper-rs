@@ -928,6 +928,7 @@
 <span id="886">886</span>
 <span id="887">887</span>
 <span id="888">888</span>
+<span id="889">889</span>
 </pre><pre class='rust '>
 <span class='comment'>// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class='comment'>// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -959,7 +960,8 @@
 <span class='doccomment'>//! Before they can be used, DM devices must be created using</span>
 <span class='doccomment'>//! `DM::device_create()`, have a mapping table loaded using</span>
 <span class='doccomment'>//! `DM::table_load()`, and then activated with</span>
-<span class='doccomment'>//! `DM::device_resume()`. Once activated, they can be used as a</span>
+<span class='doccomment'>//! `DM::device_suspend()`. (This function is used for both suspending</span>
+<span class='doccomment'>//! and activating a device.) Once activated, they can be used as a</span>
 <span class='doccomment'>//! regular block device, including having other DM devices map to</span>
 <span class='doccomment'>//! them.</span>
 <span class='doccomment'>//!</span>

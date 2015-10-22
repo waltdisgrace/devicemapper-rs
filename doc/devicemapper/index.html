@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/devicemapper/lib.rs.html#5-888' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/devicemapper/lib.rs.html#5-889' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Low-level devicemapper configuration of the running kernel.</p>
 
 <h1 id='overview' class='section-header'><a href='#overview'>Overview</a></h1>
@@ -72,7 +72,8 @@ larger, slower one (dm-cache)</li>
 <p>Before they can be used, DM devices must be created using
 <code>DM::device_create()</code>, have a mapping table loaded using
 <code>DM::table_load()</code>, and then activated with
-<code>DM::device_resume()</code>. Once activated, they can be used as a
+<code>DM::device_suspend()</code>. (This function is used for both suspending
+and activating a device.) Once activated, they can be used as a
 regular block device, including having other DM devices map to
 them.</p>
 
