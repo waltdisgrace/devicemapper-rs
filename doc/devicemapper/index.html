@@ -24,10 +24,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'></p><script>window.sidebarCurrent = {name: 'devicemapper', ty: 'mod', relpath: '../'};</script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,11 +45,10 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/devicemapper/lib.rs.html#5-739' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/devicemapper/lib.rs.html#5-888' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Low-level devicemapper configuration of the running kernel.</p>
 
-<h1 id="overview" class='section-header'><a
-                           href="#overview">Overview</a></h1>
+<h1 id='overview' class='section-header'><a href='#overview'>Overview</a></h1>
 <p>Linux&#39;s devicemapper allows the creation of block devices whose
 storage is mapped to other block devices in useful ways, either by
 changing the location of its data blocks, or performing some
@@ -69,8 +68,7 @@ larger, slower one (dm-cache)</li>
 <li>Verifying the contents of a read-only volume (dm-verity)</li>
 </ul>
 
-<h1 id="usage" class='section-header'><a
-                           href="#usage">Usage</a></h1>
+<h1 id='usage' class='section-header'><a href='#usage'>Usage</a></h1>
 <p>Before they can be used, DM devices must be created using
 <code>DM::device_create()</code>, have a mapping table loaded using
 <code>DM::table_load()</code>, and then activated with
@@ -99,6 +97,24 @@ descriptions for which table they affect.</p>
 
                         </td>
                     </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.DeviceInfo.html'
+                               title='devicemapper::DeviceInfo'>DeviceInfo</a></td>
+                        <td class='docblock short'>
+                             <p>Contains information about the device.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.DmFlags.html'
+                               title='devicemapper::DmFlags'>DmFlags</a></td>
+                        <td class='docblock short'>
+                             <p>Flags used by devicemapper.</p>
+
+                        </td>
+                    </tr>
                 </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table>
                     <tr class=' module-item'>
@@ -108,6 +124,163 @@ descriptions for which table they affect.</p>
                              <p>Used with <code>DM::table_status()</code> to choose either return of info or
 tables for a target. The contents of each of these strings is
 target-specific.</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_ACTIVE_PRESENT.html'
+                               title='devicemapper::DM_ACTIVE_PRESENT'>DM_ACTIVE_PRESENT</a></td>
+                        <td class='docblock short'>
+                             <p>Out: Active table is present.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_BUFFER_FULL.html'
+                               title='devicemapper::DM_BUFFER_FULL'>DM_BUFFER_FULL</a></td>
+                        <td class='docblock short'>
+                             <p>Out: Passed-in buffer was too small.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_DATA_OUT.html'
+                               title='devicemapper::DM_DATA_OUT'>DM_DATA_OUT</a></td>
+                        <td class='docblock short'>
+                             <p>Out: A message generated output data.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_DEFERRED_REMOVE.html'
+                               title='devicemapper::DM_DEFERRED_REMOVE'>DM_DEFERRED_REMOVE</a></td>
+                        <td class='docblock short'>
+                             <p>In: Do not remove in-use devices.
+Out: Device scheduled to be removed when closed.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_INACTIVE_PRESENT.html'
+                               title='devicemapper::DM_INACTIVE_PRESENT'>DM_INACTIVE_PRESENT</a></td>
+                        <td class='docblock short'>
+                             <p>Out: Inactive table is present.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_INTERNAL_SUSPEND.html'
+                               title='devicemapper::DM_INTERNAL_SUSPEND'>DM_INTERNAL_SUSPEND</a></td>
+                        <td class='docblock short'>
+                             <p>Out: Device is suspended internally.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_NOFLUSH.html'
+                               title='devicemapper::DM_NOFLUSH'>DM_NOFLUSH</a></td>
+                        <td class='docblock short'>
+                             <p>In: Suspend without flushing queued I/Os.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_PERSISTENT_DEV.html'
+                               title='devicemapper::DM_PERSISTENT_DEV'>DM_PERSISTENT_DEV</a></td>
+                        <td class='docblock short'>
+                             <p>In: Use passed-in minor number.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_QUERY_INACTIVE_TABLE.html'
+                               title='devicemapper::DM_QUERY_INACTIVE_TABLE'>DM_QUERY_INACTIVE_TABLE</a></td>
+                        <td class='docblock short'>
+                             <p>In: Query inactive table instead of active.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_READONLY.html'
+                               title='devicemapper::DM_READONLY'>DM_READONLY</a></td>
+                        <td class='docblock short'>
+                             <p>In: Device should be read-only.
+Out: Device is read-only.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_SECURE_DATA.html'
+                               title='devicemapper::DM_SECURE_DATA'>DM_SECURE_DATA</a></td>
+                        <td class='docblock short'>
+                             <p>In: All buffers are wiped after use. Use when handling crypto keys.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_SKIP_BDGET.html'
+                               title='devicemapper::DM_SKIP_BDGET'>DM_SKIP_BDGET</a></td>
+                        <td class='docblock short'>
+                             <p>Obsolete.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_SKIP_LOCKFS.html'
+                               title='devicemapper::DM_SKIP_LOCKFS'>DM_SKIP_LOCKFS</a></td>
+                        <td class='docblock short'>
+                             <p>In: Avoid freezing filesystem when suspending.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_STATUS_TABLE.html'
+                               title='devicemapper::DM_STATUS_TABLE'>DM_STATUS_TABLE</a></td>
+                        <td class='docblock short'>
+                             <p>In: STATUS command returns table info instead of status.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_SUSPEND.html'
+                               title='devicemapper::DM_SUSPEND'>DM_SUSPEND</a></td>
+                        <td class='docblock short'>
+                             <p>In: Device should be suspended.
+Out: Device is suspended.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_UEVENT_GENERATED.html'
+                               title='devicemapper::DM_UEVENT_GENERATED'>DM_UEVENT_GENERATED</a></td>
+                        <td class='docblock short'>
+                             <p>Out: A uevent was generated, the caller may need to wait for it.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='constant' href='constant.DM_UUID.html'
+                               title='devicemapper::DM_UUID'>DM_UUID</a></td>
+                        <td class='docblock short'>
+                             <p>In: Rename affects UUID field, not name field.</p>
 
                         </td>
                     </tr>
@@ -126,10 +299,12 @@ target-specific.</p>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -146,7 +321,7 @@ target-specific.</p>
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -166,7 +341,7 @@ target-specific.</p>
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
