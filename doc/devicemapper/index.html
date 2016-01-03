@@ -9,6 +9,7 @@
 
     <title>devicemapper - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -45,7 +46,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/devicemapper/lib.rs.html#5-889' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/devicemapper/lib.rs.html#5-934' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Low-level devicemapper configuration of the running kernel.</p>
 
 <h1 id='overview' class='section-header'><a href='#overview'>Overview</a></h1>
@@ -119,12 +120,11 @@ descriptions for which table they affect.</p>
                 </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table>
                     <tr class=' module-item'>
-                        <td><a class='enum' href='enum.StatusType.html'
-                               title='devicemapper::StatusType'>StatusType</a></td>
+                        <td><a class='enum' href='enum.DevId.html'
+                               title='devicemapper::DevId'>DevId</a></td>
                         <td class='docblock short'>
-                             <p>Used with <code>DM::table_status()</code> to choose either return of info or
-tables for a target. The contents of each of these strings is
-target-specific.</p>
+                             <p>Used as a parameter for functions that take either a Device name
+or a Device UUID.</p>
 
                         </td>
                     </tr>
@@ -354,6 +354,6 @@ Out: Device is suspended.</p>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

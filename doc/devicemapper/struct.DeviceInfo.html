@@ -9,6 +9,7 @@
 
     <title>devicemapper::DeviceInfo - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -45,21 +46,21 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-3639' class='srclink' href='../src/devicemapper/lib.rs.html#223-225' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-673' class='srclink' href='../src/devicemapper/lib.rs.html#221-223' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct DeviceInfo {
     // some fields omitted
 }</pre><div class='docblock'><p>Contains information about the device.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../devicemapper/struct.DeviceInfo.html' title='devicemapper::DeviceInfo'>DeviceInfo</a></code></h3><div class='impl-items'><h4 id='method.version' class='method'><code>fn <a href='#method.version' class='fnname'>version</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, <a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, <a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</a></code></h4>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../devicemapper/struct.DeviceInfo.html' title='devicemapper::DeviceInfo'>DeviceInfo</a></code></h3><div class='impl-items'><h4 id='method.version' class='method'><code>fn <a href='#method.version' class='fnname'>version</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>)</a></code></h4>
 <div class='docblock'><p>The major, minor, and patchlevel versions of devicemapper.</p>
-</div><h4 id='method.open_count' class='method'><code>fn <a href='#method.open_count' class='fnname'>open_count</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a></code></h4>
+</div><h4 id='method.open_count' class='method'><code>fn <a href='#method.open_count' class='fnname'>open_count</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a></code></h4>
 <div class='docblock'><p>The number of times the device is currently open.</p>
-</div><h4 id='method.event_nr' class='method'><code>fn <a href='#method.event_nr' class='fnname'>event_nr</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></h4>
+</div><h4 id='method.event_nr' class='method'><code>fn <a href='#method.event_nr' class='fnname'>event_nr</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></h4>
 <div class='docblock'><p>The last event number for the device.</p>
 </div><h4 id='method.device' class='method'><code>fn <a href='#method.device' class='fnname'>device</a>(&amp;self) -&gt; <a class='struct' href='../devicemapper/struct.Device.html' title='devicemapper::Device'>Device</a></code></h4>
 <div class='docblock'><p>The device&#39;s major and minor device numbers, as a Device.</p>
-</div><h4 id='method.name' class='method'><code>fn <a href='#method.name' class='fnname'>name</a>(&amp;self) -&gt; &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
+</div><h4 id='method.name' class='method'><code>fn <a href='#method.name' class='fnname'>name</a>(&amp;self) -&gt; &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
 <div class='docblock'><p>The device&#39;s name.</p>
-</div><h4 id='method.uuid' class='method'><code>fn <a href='#method.uuid' class='fnname'>uuid</a>(&amp;self) -&gt; &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
+</div><h4 id='method.uuid' class='method'><code>fn <a href='#method.uuid' class='fnname'>uuid</a>(&amp;self) -&gt; &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
 <div class='docblock'><p>The device&#39;s UUID.</p>
 </div><h4 id='method.flags' class='method'><code>fn <a href='#method.flags' class='fnname'>flags</a>(&amp;self) -&gt; <a class='struct' href='../devicemapper/struct.DmFlags.html' title='devicemapper::DmFlags'>DmFlags</a></code></h4>
 <div class='docblock'><p>The flags returned from the device.</p>
@@ -124,6 +125,6 @@
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `DM_INTERNAL_SUSPEND` constant in crate `devicemapper`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, DM_INTERNAL_SUSPEND">
+    <meta name="description" content="API documentation for the Rust `DevId` enum in crate `devicemapper`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, DevId">
 
-    <title>devicemapper::DM_INTERNAL_SUSPEND - Rust</title>
+    <title>devicemapper::DevId - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
@@ -27,7 +27,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='index.html'>devicemapper</a></p><script>window.sidebarCurrent = {name: 'DM_INTERNAL_SUSPEND', ty: 'constant', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='index.html'>devicemapper</a></p><script>window.sidebarCurrent = {name: 'DevId', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -41,14 +41,21 @@
         </form>
     </nav>
 
-    <section id='main' class="content constant">
-<h1 class='fqn'><span class='in-band'><a href='index.html'>devicemapper</a>::<wbr><a class='constant' href=''>DM_INTERNAL_SUSPEND</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content enum">
+<h1 class='fqn'><span class='in-band'>Enum <a href='index.html'>devicemapper</a>::<wbr><a class='enum' href=''>DevId</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-270' class='srclink' href='../src/devicemapper/<bitflags macros>.html#7-8' title='goto source code'>[src]</a></span></h1>
-<pre class='rust const'>pub const DM_INTERNAL_SUSPEND: <a class='struct' href='../devicemapper/struct.DmFlags.html' title='devicemapper::DmFlags'>DmFlags</a></pre><div class='docblock'><p>Out: Device is suspended internally.</p>
-</div></section>
+        </span><a id='src-699' class='srclink' href='../src/devicemapper/lib.rs.html#272-277' title='goto source code'>[src]</a></span></h1>
+<pre class='rust enum'>pub enum DevId&lt;'a&gt; {
+    Name(&amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>),
+    Uuid(&amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>),
+}</pre><div class='docblock'><p>Used as a parameter for functions that take either a Device name
+or a Device UUID.</p>
+</div><h2 class='variants'>Variants</h2>
+<table><tr><td id='variant.Name'><code>Name</code></td><td><div class='docblock'><p>The parameter is the device&#39;s name</p>
+</div></td></tr><tr><td id='variant.Uuid'><code>Uuid</code></td><td><div class='docblock'><p>The parameter is the device&#39;s UUID</p>
+</div></td></tr></table></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
