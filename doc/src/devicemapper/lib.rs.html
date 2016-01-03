@@ -1522,10 +1522,10 @@
     <span class='doccomment'>/// # Example</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// ```no_run</span>
-    <span class='doccomment'>/// use devicemapper::{DM, DmFlags, DM_SUSPEND};</span>
+    <span class='doccomment'>/// use devicemapper::{DM, DmFlags, DM_SUSPEND, DevId};</span>
     <span class='doccomment'>/// let dm = DM::new().unwrap();</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// dm.device_suspend(&quot;example-dev&quot;, DM_SUSPEND).unwrap();</span>
+    <span class='doccomment'>/// dm.device_suspend(&amp;DevId::Name(&quot;example-dev&quot;), DM_SUSPEND).unwrap();</span>
     <span class='doccomment'>/// ```</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>device_suspend</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>, <span class='ident'>flags</span>: <span class='ident'>DmFlags</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>DeviceInfo</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>hdr</span>: <span class='ident'>dmi</span>::<span class='ident'>Struct_dm_ioctl</span> <span class='op'>=</span> <span class='ident'>Default</span>::<span class='ident'>default</span>();
@@ -1594,14 +1594,14 @@
     <span class='doccomment'>/// # Example</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// ```no_run</span>
-    <span class='doccomment'>/// use devicemapper::{DM, DmFlags};</span>
+    <span class='doccomment'>/// use devicemapper::{DM, DmFlags, DevId};</span>
     <span class='doccomment'>/// let dm = DM::new().unwrap();</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// // Create a 16MiB device (32768 512-byte sectors) that maps to /dev/sdb1</span>
     <span class='doccomment'>/// // starting 1MiB into sdb1</span>
     <span class='doccomment'>/// let table = vec![(0, 32768, &quot;linear&quot;, &quot;/dev/sdb1 2048&quot;)];</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// dm.table_load(&quot;example-dev&quot;, &amp;table).unwrap();</span>
+    <span class='doccomment'>/// dm.table_load(&amp;DevId::Name(&quot;example-dev&quot;), &amp;table).unwrap();</span>
     <span class='doccomment'>/// ```</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>table_load</span><span class='op'>&lt;</span><span class='ident'>T1</span>, <span class='ident'>T2</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>, <span class='ident'>targets</span>: <span class='kw-2'>&amp;</span>[(<span class='ident'>u64</span>, <span class='ident'>u64</span>, <span class='ident'>T1</span>, <span class='ident'>T2</span>)])
                       <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>DeviceInfo</span><span class='op'>&gt;</span>
@@ -1777,10 +1777,10 @@
     <span class='doccomment'>/// # Example</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// ```no_run</span>
-    <span class='doccomment'>/// use devicemapper::{DM, DmFlags, DM_STATUS_TABLE};</span>
+    <span class='doccomment'>/// use devicemapper::{DM, DmFlags, DM_STATUS_TABLE, DevId};</span>
     <span class='doccomment'>/// let dm = DM::new().unwrap();</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// let res = dm.table_status(&quot;example-dev&quot;, DM_STATUS_TABLE).unwrap();</span>
+    <span class='doccomment'>/// let res = dm.table_status(&amp;DevId::Name(&quot;example-dev&quot;), DM_STATUS_TABLE).unwrap();</span>
     <span class='doccomment'>/// println!(&quot;{} {:?}&quot;, res.0.name(), res.1);</span>
     <span class='doccomment'>/// ```</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>table_status</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>, <span class='ident'>flags</span>: <span class='ident'>DmFlags</span>)
