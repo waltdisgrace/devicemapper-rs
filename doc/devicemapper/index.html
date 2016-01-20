@@ -46,7 +46,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/devicemapper/lib.rs.html#5-934' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/devicemapper/lib.rs.html#5-941' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Low-level devicemapper configuration of the running kernel.</p>
 
 <h1 id='overview' class='section-header'><a href='#overview'>Overview</a></h1>
@@ -292,6 +292,19 @@ Out: Device is suspended.</p>
                                title='devicemapper::dev_majors'>dev_majors</a></td>
                         <td class='docblock short'>
                              <p>Major numbers used by DM.</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.TargetLine.html'
+                               title='devicemapper::TargetLine'>TargetLine</a></td>
+                        <td class='docblock short'>
+                             <p>This 4-tuple consists of starting offset (sectors), length
+(sectors), target type (string, e.g. &quot;linear&quot;), and
+params(string). See target documentation for the format of each
+target type&#39;s params field.</p>
 
                         </td>
                     </tr>

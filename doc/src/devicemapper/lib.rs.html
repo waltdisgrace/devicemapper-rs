@@ -975,6 +975,13 @@
 <span id="932">932</span>
 <span id="933">933</span>
 <span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
+<span id="940">940</span>
+<span id="941">941</span>
 </pre><pre class='rust '>
 <span class='comment'>// This Source Code Form is subject to the terms of the Mozilla Public</span>
 <span class='comment'>// License, v. 2.0. If a copy of the MPL was not distributed with this</span>
@@ -1014,8 +1021,9 @@
 <span class='doccomment'>//! Devices have &quot;active&quot; and &quot;inactive&quot; mapping tables. See function</span>
 <span class='doccomment'>//! descriptions for which table they affect.</span>
 
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>clone_from_slice</span>, <span class='ident'>convert</span>, <span class='ident'>custom_derive</span>, <span class='ident'>plugin</span>)]</span>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>custom_derive</span>, <span class='ident'>plugin</span>)]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>plugin</span>(<span class='ident'>serde_macros</span>)]</span>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>plugin</span>(<span class='ident'>clippy</span>)]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>warn</span>(<span class='ident'>missing_docs</span>)]</span>
 
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>libc</span>;
@@ -1119,7 +1127,7 @@
     <span class='doccomment'>/// Returns the path in `/dev` that corresponds with the device number.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>path</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PathBuf</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>f</span> <span class='op'>=</span> <span class='ident'>File</span>::<span class='ident'>open</span>(<span class='string'>&quot;/proc/partitions&quot;</span>)
-            .<span class='ident'>ok</span>().<span class='ident'>expect</span>(<span class='string'>&quot;Could not open /proc/partitions&quot;</span>);
+            .<span class='ident'>expect</span>(<span class='string'>&quot;Could not open /proc/partitions&quot;</span>);
 
         <span class='kw'>let</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>BufReader</span>::<span class='ident'>new</span>(<span class='ident'>f</span>);
 
@@ -1145,10 +1153,11 @@
             <span class='prelude-val'>Err</span>(_) <span class='op'>=&gt;</span> {
                 <span class='kw'>match</span> <span class='ident'>Path</span>::<span class='ident'>new</span>(<span class='ident'>s</span>).<span class='ident'>metadata</span>() {
                     <span class='prelude-val'>Ok</span>(<span class='ident'>x</span>) <span class='op'>=&gt;</span> {
-                        <span class='kw'>match</span> <span class='ident'>x</span>.<span class='ident'>mode</span>() <span class='kw-2'>&amp;</span> <span class='number'>0x6000</span> <span class='op'>==</span> <span class='number'>0x6000</span> { <span class='comment'>// S_IFBLK</span>
-                            <span class='boolval'>true</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>Device</span>::<span class='ident'>from</span>(<span class='ident'>x</span>.<span class='ident'>rdev</span>())),
-                            <span class='boolval'>false</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>new</span>(
-                                <span class='ident'>InvalidInput</span>, <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{} not block device&quot;</span>, <span class='ident'>s</span>))),
+                        <span class='kw'>if</span> <span class='ident'>x</span>.<span class='ident'>mode</span>() <span class='kw-2'>&amp;</span> <span class='number'>0x6000</span> <span class='op'>==</span> <span class='number'>0x6000</span> { <span class='comment'>// S_IFBLK</span>
+                            <span class='prelude-val'>Ok</span>(<span class='ident'>Device</span>::<span class='ident'>from</span>(<span class='ident'>x</span>.<span class='ident'>rdev</span>()))
+                        } <span class='kw'>else</span> {
+                            <span class='prelude-val'>Err</span>(<span class='ident'>Error</span>::<span class='ident'>new</span>(
+                                <span class='ident'>InvalidInput</span>, <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{} not block device&quot;</span>, <span class='ident'>s</span>)))
                         }
                     },
                     <span class='prelude-val'>Err</span>(<span class='ident'>x</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>x</span>)
@@ -1176,7 +1185,7 @@
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>set</span> <span class='op'>=</span> <span class='ident'>BTreeSet</span>::<span class='ident'>new</span>();
 
     <span class='kw'>let</span> <span class='ident'>f</span> <span class='op'>=</span> <span class='ident'>File</span>::<span class='ident'>open</span>(<span class='string'>&quot;/proc/devices&quot;</span>)
-        .<span class='ident'>ok</span>().<span class='ident'>expect</span>(<span class='string'>&quot;Could not open /proc/devices&quot;</span>);
+        .<span class='ident'>expect</span>(<span class='string'>&quot;Could not open /proc/devices&quot;</span>);
 
     <span class='kw'>let</span> <span class='ident'>reader</span> <span class='op'>=</span> <span class='ident'>BufReader</span>::<span class='ident'>new</span>(<span class='ident'>f</span>);
 
@@ -1254,6 +1263,12 @@
     <span class='ident'>Uuid</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>str</span>),
 }
 
+<span class='doccomment'>/// This 4-tuple consists of starting offset (sectors), length</span>
+<span class='doccomment'>/// (sectors), target type (string, e.g. &quot;linear&quot;), and</span>
+<span class='doccomment'>/// params(string). See target documentation for the format of each</span>
+<span class='doccomment'>/// target type&#39;s params field.</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>TargetLine</span> <span class='op'>=</span> (<span class='ident'>u64</span>, <span class='ident'>u64</span>, <span class='ident'>String</span>, <span class='ident'>String</span>);
+
 <span class='doccomment'>/// Context needed for communicating with devicemapper.</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>DM</span> {
     <span class='ident'>file</span>: <span class='ident'>File</span>,
@@ -1318,11 +1333,10 @@
         <span class='ident'>v</span>.<span class='ident'>resize</span>(<span class='ident'>cap</span>, <span class='number'>0</span>);
 
         <span class='kw'>loop</span> {
-            <span class='kw'>match</span> <span class='kw'>unsafe</span> {
+            <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Err</span>(_) <span class='op'>=</span> <span class='kw'>unsafe</span> {
                 <span class='ident'>ioctl</span>::<span class='ident'>read_into_ptr</span>(<span class='self'>self</span>.<span class='ident'>file</span>.<span class='ident'>as_raw_fd</span>(), <span class='ident'>op</span>, <span class='ident'>v</span>.<span class='ident'>as_mut_ptr</span>())
             } {
-                <span class='prelude-val'>Err</span>(_) <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>((<span class='ident'>Error</span>::<span class='ident'>last_os_error</span>())),
-                _ <span class='op'>=&gt;</span> {},
+                <span class='kw'>return</span> <span class='prelude-val'>Err</span>((<span class='ident'>Error</span>::<span class='ident'>last_os_error</span>()));
             };
 
             <span class='kw'>let</span> <span class='ident'>hdr</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>dmi</span>::<span class='ident'>Struct_dm_ioctl</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
@@ -1392,8 +1406,8 @@
                                           <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='prelude-val'>None</span>));
 
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>devs</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
-        <span class='kw'>if</span> <span class='ident'>data_out</span>.<span class='ident'>len</span>() <span class='op'>&gt;</span> <span class='number'>0</span> {
-            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>data_out</span>.<span class='ident'>as_slice</span>();
+        <span class='kw'>if</span> <span class='op'>!</span><span class='ident'>data_out</span>.<span class='ident'>is_empty</span>() {
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>data_out</span>[..];
 
             <span class='kw'>loop</span> {
                 <span class='kw'>let</span> <span class='ident'>device</span>: <span class='kw-2'>&amp;</span><span class='ident'>dmi</span>::<span class='ident'>Struct_dm_name_list</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
@@ -1459,9 +1473,9 @@
         <span class='kw'>let</span> <span class='ident'>clean_flags</span> <span class='op'>=</span> <span class='ident'>DM_DEFERRED_REMOVE</span> <span class='kw-2'>&amp;</span> <span class='ident'>flags</span>;
 
         <span class='ident'>Self</span>::<span class='ident'>initialize_hdr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>clean_flags</span>);
-        <span class='kw'>match</span> <span class='ident'>name</span> {
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
+        <span class='kw'>match</span> <span class='op'>*</span><span class='ident'>name</span> {
+            <span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
+            <span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
         };
 
         <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>do_ioctl</span>(<span class='ident'>dmi</span>::<span class='ident'>DM_DEV_REMOVE_CMD</span> <span class='kw'>as</span> <span class='ident'>u8</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='prelude-val'>None</span>));
@@ -1482,15 +1496,12 @@
 
         <span class='ident'>Self</span>::<span class='ident'>initialize_hdr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>clean_flags</span>);
 
-        <span class='kw'>let</span> <span class='ident'>max_len</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>clean_flags</span>.<span class='ident'>contains</span>(<span class='ident'>DM_UUID</span>) {
-            <span class='boolval'>true</span> <span class='op'>=&gt;</span> {
-                <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>old_name</span>);
-                <span class='ident'>DM_UUID_LEN</span> <span class='op'>-</span> <span class='number'>1</span>
-            },
-            <span class='boolval'>false</span> <span class='op'>=&gt;</span> {
-                <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>old_name</span>);
-                <span class='ident'>DM_NAME_LEN</span> <span class='op'>-</span> <span class='number'>1</span>
-            },
+        <span class='kw'>let</span> <span class='ident'>max_len</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='ident'>clean_flags</span>.<span class='ident'>contains</span>(<span class='ident'>DM_UUID</span>) {
+            <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>old_name</span>);
+            <span class='ident'>DM_UUID_LEN</span> <span class='op'>-</span> <span class='number'>1</span>
+        } <span class='kw'>else</span> {
+            <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>old_name</span>);
+            <span class='ident'>DM_NAME_LEN</span> <span class='op'>-</span> <span class='number'>1</span>
         };
 
         <span class='kw'>if</span> <span class='ident'>new_name</span>.<span class='ident'>as_bytes</span>().<span class='ident'>len</span>() <span class='op'>&gt;</span> <span class='ident'>max_len</span> {
@@ -1533,9 +1544,9 @@
         <span class='kw'>let</span> <span class='ident'>clean_flags</span> <span class='op'>=</span> (<span class='ident'>DM_SUSPEND</span> <span class='op'>|</span> <span class='ident'>DM_NOFLUSH</span> <span class='op'>|</span> <span class='ident'>DM_SKIP_LOCKFS</span>) <span class='kw-2'>&amp;</span> <span class='ident'>flags</span>;
 
         <span class='ident'>Self</span>::<span class='ident'>initialize_hdr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>clean_flags</span>);
-        <span class='kw'>match</span> <span class='ident'>name</span> {
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
+        <span class='kw'>match</span> <span class='op'>*</span><span class='ident'>name</span> {
+            <span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
+            <span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
         };
 
         <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>do_ioctl</span>(<span class='ident'>dmi</span>::<span class='ident'>DM_DEV_SUSPEND_CMD</span> <span class='kw'>as</span> <span class='ident'>u8</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='prelude-val'>None</span>));
@@ -1551,9 +1562,9 @@
 
         <span class='comment'>// No flags checked so don&#39;t pass any</span>
         <span class='ident'>Self</span>::<span class='ident'>initialize_hdr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>DmFlags</span>::<span class='ident'>empty</span>());
-        <span class='kw'>match</span> <span class='ident'>name</span> {
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
+        <span class='kw'>match</span> <span class='op'>*</span><span class='ident'>name</span> {
+            <span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
+            <span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
         };
 
         <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>do_ioctl</span>(<span class='ident'>dmi</span>::<span class='ident'>DM_DEV_STATUS_CMD</span> <span class='kw'>as</span> <span class='ident'>u8</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='prelude-val'>None</span>));
@@ -1565,16 +1576,19 @@
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// Once an event occurs, this function behaves just like</span>
     <span class='doccomment'>/// `table_status`, see that function for more details.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// This interface is not very friendly to monitoring multiple devices.</span>
+    <span class='doccomment'>/// Events are also exported via uevents, that method may be preferable.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>device_wait</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>, <span class='ident'>flags</span>: <span class='ident'>DmFlags</span>)
-                        <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(<span class='ident'>DeviceInfo</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>u64</span>, <span class='ident'>u64</span>, <span class='ident'>String</span>, <span class='ident'>String</span>)<span class='op'>&gt;</span>)<span class='op'>&gt;</span> {
+                        <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(<span class='ident'>DeviceInfo</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>TargetLine</span><span class='op'>&gt;</span>)<span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>hdr</span>: <span class='ident'>dmi</span>::<span class='ident'>Struct_dm_ioctl</span> <span class='op'>=</span> <span class='ident'>Default</span>::<span class='ident'>default</span>();
 
         <span class='kw'>let</span> <span class='ident'>clean_flags</span> <span class='op'>=</span> <span class='ident'>DM_QUERY_INACTIVE_TABLE</span> <span class='kw-2'>&amp;</span> <span class='ident'>flags</span>;
 
         <span class='ident'>Self</span>::<span class='ident'>initialize_hdr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>clean_flags</span>);
-        <span class='kw'>match</span> <span class='ident'>name</span> {
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
+        <span class='kw'>match</span> <span class='op'>*</span><span class='ident'>name</span> {
+            <span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
+            <span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
         };
 
         <span class='kw'>let</span> <span class='ident'>data_out</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>do_ioctl</span>(<span class='ident'>dmi</span>::<span class='ident'>DM_DEV_WAIT_CMD</span> <span class='kw'>as</span> <span class='ident'>u8</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='prelude-val'>None</span>));
@@ -1623,7 +1637,7 @@
             };
             <span class='ident'>dst</span>.<span class='ident'>clone_from_slice</span>(<span class='ident'>t</span>.<span class='number'>2</span>.<span class='ident'>borrow</span>().<span class='ident'>as_bytes</span>());
 
-            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>t</span>.<span class='number'>3</span>.<span class='ident'>borrow</span>().<span class='ident'>to_string</span>();
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>params</span> <span class='op'>=</span> <span class='ident'>t</span>.<span class='number'>3</span>.<span class='ident'>borrow</span>().<span class='ident'>to_owned</span>();
 
             <span class='kw'>let</span> <span class='ident'>pad_bytes</span> <span class='op'>=</span> <span class='ident'>align_to</span>(
                 <span class='ident'>params</span>.<span class='ident'>len</span>() <span class='op'>+</span> <span class='number'>1usize</span>, <span class='number'>8usize</span>) <span class='op'>-</span> <span class='ident'>params</span>.<span class='ident'>len</span>();
@@ -1639,9 +1653,9 @@
 
         <span class='comment'>// No flags checked so don&#39;t pass any</span>
         <span class='ident'>Self</span>::<span class='ident'>initialize_hdr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>DmFlags</span>::<span class='ident'>empty</span>());
-        <span class='kw'>match</span> <span class='ident'>name</span> {
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
+        <span class='kw'>match</span> <span class='op'>*</span><span class='ident'>name</span> {
+            <span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
+            <span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
         };
 
         <span class='comment'>// io_ioctl() will set hdr.data_size but we must set target_count</span>
@@ -1672,9 +1686,9 @@
 
         <span class='comment'>// No flags checked so don&#39;t pass any</span>
         <span class='ident'>Self</span>::<span class='ident'>initialize_hdr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>DmFlags</span>::<span class='ident'>empty</span>());
-        <span class='kw'>match</span> <span class='ident'>name</span> {
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
+        <span class='kw'>match</span> <span class='op'>*</span><span class='ident'>name</span> {
+            <span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
+            <span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
         };
 
         <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>do_ioctl</span>(<span class='ident'>dmi</span>::<span class='ident'>DM_TABLE_CLEAR_CMD</span> <span class='kw'>as</span> <span class='ident'>u8</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='prelude-val'>None</span>));
@@ -1701,8 +1715,8 @@
                                           <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='prelude-val'>None</span>));
 
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>devs</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
-        <span class='kw'>if</span> <span class='ident'>data_out</span>.<span class='ident'>len</span>() <span class='op'>&gt;</span> <span class='number'>0</span> {
-            <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>data_out</span>.<span class='ident'>as_slice</span>();
+        <span class='kw'>if</span> <span class='op'>!</span><span class='ident'>data_out</span>.<span class='ident'>is_empty</span>() {
+            <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>data_out</span>[..];
             <span class='kw'>let</span> <span class='ident'>deps</span>: <span class='kw-2'>&amp;</span><span class='ident'>dmi</span>::<span class='ident'>Struct_dm_target_deps</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
                 <span class='ident'>transmute</span>(<span class='ident'>result</span>.<span class='ident'>as_ptr</span>())
             };
@@ -1784,16 +1798,16 @@
     <span class='doccomment'>/// println!(&quot;{} {:?}&quot;, res.0.name(), res.1);</span>
     <span class='doccomment'>/// ```</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>table_status</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>, <span class='ident'>flags</span>: <span class='ident'>DmFlags</span>)
-                        <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(<span class='ident'>DeviceInfo</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>u64</span>, <span class='ident'>u64</span>, <span class='ident'>String</span>, <span class='ident'>String</span>)<span class='op'>&gt;</span>)<span class='op'>&gt;</span> {
+                        <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(<span class='ident'>DeviceInfo</span>, <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>TargetLine</span><span class='op'>&gt;</span>)<span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>hdr</span>: <span class='ident'>dmi</span>::<span class='ident'>Struct_dm_ioctl</span> <span class='op'>=</span> <span class='ident'>Default</span>::<span class='ident'>default</span>();
 
         <span class='kw'>let</span> <span class='ident'>clean_flags</span> <span class='op'>=</span>
             (<span class='ident'>DM_NOFLUSH</span> <span class='op'>|</span> <span class='ident'>DM_STATUS_TABLE</span> <span class='op'>|</span> <span class='ident'>DM_QUERY_INACTIVE_TABLE</span>) <span class='kw-2'>&amp;</span> <span class='ident'>flags</span>;
 
         <span class='ident'>Self</span>::<span class='ident'>initialize_hdr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>clean_flags</span>);
-        <span class='kw'>match</span> <span class='ident'>name</span> {
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
+        <span class='kw'>match</span> <span class='op'>*</span><span class='ident'>name</span> {
+            <span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
+            <span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
         };
 
         <span class='kw'>let</span> <span class='ident'>data_out</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>do_ioctl</span>(<span class='ident'>dmi</span>::<span class='ident'>DM_TABLE_STATUS_CMD</span> <span class='kw'>as</span> <span class='ident'>u8</span>,
@@ -1816,8 +1830,8 @@
                                           <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='prelude-val'>None</span>));
 
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>targets</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
-        <span class='kw'>if</span> <span class='ident'>data_out</span>.<span class='ident'>len</span>() <span class='op'>&gt;</span> <span class='number'>0</span> {
-            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>data_out</span>.<span class='ident'>as_slice</span>();
+        <span class='kw'>if</span> <span class='op'>!</span><span class='ident'>data_out</span>.<span class='ident'>is_empty</span>() {
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>data_out</span>[..];
 
             <span class='kw'>loop</span> {
                 <span class='kw'>let</span> <span class='ident'>tver</span>: <span class='kw-2'>&amp;</span><span class='ident'>dmi</span>::<span class='ident'>Struct_dm_target_versions</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
@@ -1848,9 +1862,9 @@
 
         <span class='comment'>// No flags checked so don&#39;t pass any</span>
         <span class='ident'>Self</span>::<span class='ident'>initialize_hdr</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>DmFlags</span>::<span class='ident'>empty</span>());
-        <span class='kw'>match</span> <span class='ident'>name</span> {
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
-            <span class='kw-2'>&amp;</span><span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
+        <span class='kw'>match</span> <span class='op'>*</span><span class='ident'>name</span> {
+            <span class='ident'>DevId</span>::<span class='ident'>Name</span>(<span class='ident'>name</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_name</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>name</span>),
+            <span class='ident'>DevId</span>::<span class='ident'>Uuid</span>(<span class='ident'>uuid</span>) <span class='op'>=&gt;</span> <span class='ident'>Self</span>::<span class='ident'>hdr_set_uuid</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='ident'>uuid</span>),
         };
 
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>msg_struct</span>: <span class='ident'>dmi</span>::<span class='ident'>Struct_dm_target_msg</span> <span class='op'>=</span> <span class='ident'>Default</span>::<span class='ident'>default</span>();
@@ -1868,12 +1882,12 @@
                                           <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>hdr</span>, <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>data_in</span>)));
 
         <span class='prelude-val'>Ok</span>((<span class='ident'>DeviceInfo</span> {<span class='ident'>hdr</span>: <span class='ident'>hdr</span>},
-           <span class='kw'>match</span> (<span class='ident'>hdr</span>.<span class='ident'>flags</span> <span class='kw-2'>&amp;</span> <span class='ident'>DM_DATA_OUT</span>.<span class='ident'>bits</span>) <span class='op'>&gt;</span> <span class='number'>0</span> {
-               <span class='boolval'>true</span> <span class='op'>=&gt;</span>
-                   <span class='prelude-val'>Some</span>(<span class='ident'>String</span>::<span class='ident'>from_utf8_lossy</span>(
-                       <span class='kw-2'>&amp;</span><span class='ident'>data_out</span>[..<span class='ident'>data_out</span>.<span class='ident'>len</span>()<span class='op'>-</span><span class='number'>1</span>]).<span class='ident'>into_owned</span>()),
-               <span class='boolval'>false</span> <span class='op'>=&gt;</span> <span class='prelude-val'>None</span>
-           }))
+            <span class='kw'>if</span> (<span class='ident'>hdr</span>.<span class='ident'>flags</span> <span class='kw-2'>&amp;</span> <span class='ident'>DM_DATA_OUT</span>.<span class='ident'>bits</span>) <span class='op'>&gt;</span> <span class='number'>0</span> {
+                <span class='prelude-val'>Some</span>(<span class='ident'>String</span>::<span class='ident'>from_utf8_lossy</span>(
+                    <span class='kw-2'>&amp;</span><span class='ident'>data_out</span>[..<span class='ident'>data_out</span>.<span class='ident'>len</span>()<span class='op'>-</span><span class='number'>1</span>]).<span class='ident'>into_owned</span>())
+            } <span class='kw'>else</span> {
+                <span class='prelude-val'>None</span>
+            }))
     }
 
     <span class='doccomment'>/// Unimplemented.</span>
