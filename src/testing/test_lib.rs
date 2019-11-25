@@ -17,13 +17,24 @@ use nix::mount::{umount2, MntFlags};
 use uuid::Uuid;
 
 use crate::{
-    core::{DevId, DmNameBuf, DmOptions, DmUuidBuf, DM},
+    core::{DevId, Device, DmNameBuf, DmOptions, DmUuidBuf, DM},
     result::{DmError, DmResult, ErrorEnum},
     units::Bytes,
 };
 
 static INIT: Once = Once::new();
 static mut DM_CONTEXT: Option<DM> = None;
+
+impl DM {
+    /// Returns a list of tuples containing DM test device names, a Device, which
+    /// holds their major and minor device numbers, and on kernels that
+    /// support it, each device's last event_nr.
+    pub fn list_test_devices(&self) -> DmResult<Vec<(DmNameBuf, Device, Option<u32>)>> {
+        let mut test_devs = self.list_devices()?;
+        test_devs.retain(|x| x.0.as_bytes().ends_with(DM_TEST_ID.as_bytes()));
+        Ok(test_devs)
+    }
+}
 
 // send IOCTL via blkgetsize64
 ioctl_read!(
