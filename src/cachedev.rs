@@ -1059,4 +1059,20 @@ mod tests {
     fn loop_test_suspend() {
         test_with_spec(2, test_suspend);
     }
+
+    /// This test that an incorrect number of policy arguments results in an error.
+    #[test]
+    fn test_cache_target_params_incorrect_num_policy_args() {
+        let result = "cache 42:42 42:43 42:44 16 2 writethrough passthrough default 2"
+            .parse::<CacheTargetParams>();
+        assert_matches!(result, Err(DmError::Dm(ErrorEnum::Invalid, _)));
+    }
+
+    /// This tests that a correct number of policy arguments results in an error if that number is odd.
+    #[test]
+    fn test_cache_target_params_odd_policy_args() {
+        let result = "cache 42:42 42:43 42:44 16 2 writethrough passthrough default 1 sequential_threshold"
+            .parse::<CacheTargetParams>();
+        assert_matches!(result, Err(DmError::Dm(ErrorEnum::Invalid, _)));
+    }
 }
